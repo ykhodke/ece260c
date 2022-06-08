@@ -4,6 +4,10 @@ class monitor extends uvm_monitor;
   virtual Utopia.TB_Tx vUtopiaTx;
   int PortID;
 
+  //TOOD::
+  // 1. add uvm analysis port
+  // 2. events for trigerring covergroups
+
   extern function new(string name="monitor", uvm_component parent, input Utopia.TB_Tx vUtopiaTx, input int PortID);
   extern function void build_phase (uvm_phase phase);
   extern task run_phase();
@@ -16,6 +20,8 @@ function monitor::new(string name="monitor", uvm_component parent, input Utopia.
   this.vUtopiaTx = vUtopiaTx;
   this.PortID = PortID;
 endfunction: new
+
+//test
 
 function void driver::build_phase(uvm_phase phase);
   super.build_phase(phase);
