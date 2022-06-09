@@ -1,36 +1,45 @@
 class monitor extends uvm_monitor;
   `uvm_component_utils(monitor);
 
-  virtual Utopia.TB_Tx vUtopiaTx;
+  virtual Utopia vUtopia;
   int PortID;
+
+  uvm_active_passive_enum is_active;
+
+  uvm_analysis_port #() 
 
   //TOOD::
   // 1. add uvm analysis port
   // 2. events for trigerring covergroups
 
-  extern function new(string name="monitor", uvm_component parent, input Utopia.TB_Tx vUtopiaTx, input int PortID);
+  extern function new(string name="monitor", uvm_component parent);
   extern function void build_phase (uvm_phase phase);
-  extern task run_phase();
+  extern task run_phase(uvm_phase phase);
   extern task receive(output NNI_cell c);
 
 endclass: monitor
 
-function monitor::new(string name="monitor", uvm_component parent, input Utopia.TB_Tx vUtopiaTx, input int PortID);
+function monitor::new(string name="monitor", uvm_component parent);
   super.new(name, parent);
-  this.vUtopiaTx = vUtopiaTx;
-  this.PortID = PortID;
+  is_active = UVM_ACTIVE;
 endfunction: new
-
-//test
 
 function void driver::build_phase(uvm_phase phase);
   super.build_phase(phase);
-  if (!uvm_config_db #(virtual vUtopiaTx)::get (this, "", "vUtopiaTx", vUtopiaTx)) begin
+
+  if (!uvm_config_db #(virtual vUtopiaTx)::get (this, "", "vUtopia", vUtopia)) begin
     `uvm_fatal("MONITOR", "Failed to get BFM fom vUtopiaTx");
   end
+  
+  if (!uvm_config_db #(bit)::get (this, "", "is_active", is_active)) begin
+    `uvm_fatal("MONITOR", "Failed to get BFM fom vUtopiaTx");
+  end
+
+
+
 endfunction: build_phase
 
-task monitor::run_phase();
+task monitor::run_phase(uvm_phase phase);
   NNI_cell c;
 
   forever begin

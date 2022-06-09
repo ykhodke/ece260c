@@ -14,6 +14,6 @@ class Environment extends uvm_env;
     super.new(name, parent);
   endfunction : new
 
-  function void build_phase
+  function void build_phase 
 
 
